@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import "./Home.css"
+
 
 const Home = () => {
 
@@ -24,11 +26,17 @@ const Home = () => {
 
     return (
 
-        <div>
+        <div className="homeMainContainer">
+            <h1>Bienvenido!</h1>
+            <div>
+                <h2>Para comenzar, seleccione la dificultad de las preguntas: </h2>
+            </div>
             <div>
                 {difficulties.map(
                     difficulty =>
-                        <button onClick={() => go_to_questions_with_difficulty(difficulty)} key={difficulty}>{difficulty}</button>
+                        <div className="difficultyButtonContainer" key={difficulty}>
+                            <button className="difficultyButton" onClick={() => go_to_questions_with_difficulty(difficulty)}>{difficulty}</button>
+                        </div>
                 )}
             </div>
         </div>

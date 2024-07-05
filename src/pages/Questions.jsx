@@ -1,29 +1,34 @@
-import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const Questions = () => {
+const Questions = ({ difficulty }) => {
 
-    const { difficulty } = useParams();
     const [questions, setQuestions] = useState([]);
 
     useEffect(() => {
 
         const get_questions = async () => {
-            const url = `https://preguntados-api.vercel.app/api/questions?difficulty=${difficulty}`;
-            const response = await axios.get(url);
-            setQuestions(response.data);
+            try {
+                const url = `https://preguntados-api.vercel.app/api/questions?difficulty=${difficulty}`;
+                const response = await axios.get(url);
+                setQuestions(response.data);
+                console.log(response.data);
+            }
+            catch (e) { //Mejorar el handleo.
+                console.log(e);
+            };
         };
 
         get_questions();
 
     }, [axios]);
 
-
     return (
         
         <div>
-            {difficulty}
+            {
+
+            }
         </div>
 
     );
