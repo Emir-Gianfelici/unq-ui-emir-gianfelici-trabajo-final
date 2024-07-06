@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import "./Questions.css";
 
 const Questions = ({ difficulty }) => {
 
@@ -7,7 +8,9 @@ const Questions = ({ difficulty }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [actualQuestion, setActualQuestion] = useState(0);
     const [canNextQuestion, setCanNextQuestion] = useState(true);
-    const [isCorrectAnswer, setIsCorrectAnswer] = useState(false);
+    const [cantCorrectAnswer, setCantCorrectAnswer] = useState(0);
+    const [alreadyAnswered, setAlreadyAnswered] = useState(false);
+    const [button, setButton] = useState(null);
 
 
     useEffect(() => {
@@ -68,22 +71,38 @@ const Questions = ({ difficulty }) => {
 
 
     //Manejando las respuestas.
-    const handle_answer = async (question_id, option) => {
+    const handle_answer = async (question_id, option, element) => {
+
+        setAlreadyAnswered(true);
+        setButton(element);
+
         try {
             const url = `https://preguntados-api.vercel.app/api/answer`;
             const data = {questionId: question_id, option: option};
             const response = await axios.post(url, data);
-            setIsCorrectAnswer(response.data.answer);
+            check_answer(response.data.answer);
+            response.data.answer ? element.target.className = "correctAnswerButton" : element.target.className = "incorrectAnswerButton";
+            console.log(response.data.answer);
+
         }
         catch (e) { //Mejorar el handleo.
             console.log(e);
         };
     }
 
+    const check_answer = (answer_result) => {
+        
+        if (answer_result) {
+            setCantCorrectAnswer(cantCorrectAnswer + 1);
+        };
+    };
+
     const go_to_next_question = () => {
         
         if (actualQuestion < questions.length - 1) {
             setActualQuestion(actualQuestion + 1);
+            setAlreadyAnswered(false);
+            button.target.className = "";
         }
         else {
             setCanNextQuestion(false);
@@ -99,25 +118,25 @@ const Questions = ({ difficulty }) => {
 
     };
     
-
     return (
         
         <div>
+            <p>Respuestas Correctas: {cantCorrectAnswer}</p>
             {
                 questions[actualQuestion].Question
             }
             <div>
                 {
                     questions[actualQuestion].Answers.map(answer =>
-                        <button onClick={() => handle_answer(questions[actualQuestion].Id, answer.option)} 
+                        <button onClick={(e) => handle_answer(questions[actualQuestion].Id, answer.option, e)}
                                 key={answer.option}
-                                className={isCorrectAnswer ? "correctAnswerButton" : "incorrectAnswerButton"}>
+                                disabled={alreadyAnswered}>
                             {answer.answer_text}
                         </button>
                     )
                 }
             </div>
-            <button onClick={() => go_to_next_question()} className={canNextQuestion ? "enabledButton" : "disabledButton"}>Next</button>
+            <button onClick={() => go_to_next_question()} disabled={!canNextQuestion}>Next</button>
         </div>
 
     );
