@@ -1,10 +1,205 @@
-
-.correctAnswerButton {
-    color: green;
-    background-color: green;
+.questionContainer{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
 }
 
-.incorrectAnswerButton {
+.difficultyText{
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.difficulty{
+    color: #00fa9a;
+}
+
+.results{
+    color: #00fa9a;
+}
+
+.optionsButtonsContainer{
+    display: flex;
+    flex-direction: column;
+    margin: 1rem;
+}
+
+.correctAnswersText{
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.questionText {
+    font-size: 30px;
+    font-weight: 700;
+    max-width: 90%;
+}
+
+
+/* NORMAL OPTION BUTTON */
+.optionButton {
+    position: relative;
+    display: inline-block;
+    padding: 15px 30px;
+    border: 2px solid #00fa9a;
+    text-transform: uppercase;
+    color: #00fa9a;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 20px;
+    transition: 0.3s;
+    margin-bottom: 1rem;
+  }
+  
+  .optionButton::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    width: calc(100% + 4px);
+    height: calc(100% - -2px);
+    background-color: #1c1825;
+    transition: 0.3s ease-out;
+    transform: scaleY(1);
+  }
+  
+  .optionButton::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    width: calc(100% + 4px);
+    height: calc(100% - 50px);
+    background-color: #1c1825;
+    transition: 0.3s ease-out;
+    transform: scaleY(1);
+  }
+  
+  .optionButton:hover::before {
+    transform: translateY(-25px);
+    height: 0;
+  }
+  
+  .optionButton:hover::after {
+    transform: scaleX(0);
+    transition-delay: 0.15s;
+  }
+  
+  .optionButton:hover {
+    border: 2px solid #00fa9a;
+    border-radius: 2rem;
+  }
+  
+  .optionButton span {
+    position: relative;
+    z-index: 3;
+  }
+
+  .optionButton:disabled{
+    color: #555555;
+    border-color: #858585;
+  }
+
+  .optionButton .correctAnswer{
+    color: rgb(0, 231, 96);
+  }
+
+  .optionButton .incorrectAnswer{
     color: red;
-    background-color: red;
-}
+  }
+
+
+  /* NEXT QUESTION BUTTON */
+
+  /* === removing default button style ===*/
+.nextQuestionButton {
+    margin: 2rem;
+    height: auto;
+    background: transparent;
+    padding: 0;
+    border: none;
+    cursor: pointer;
+  }
+  
+  /* button styling */
+  .nextQuestionButton {
+    --border-right: 6px;
+    --text-stroke-color: rgba(255,255,255,0.6);
+    --animation-color: #37FF8B;
+    --fs-size: 2em;
+    letter-spacing: 3px;
+    text-decoration: none;
+    font-size: var(--fs-size);
+    font-family: "Arial";
+    position: relative;
+    text-transform: uppercase;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--text-stroke-color);
+  }
+  /* this is the text, when you hover on button */
+  .hover-text {
+    position: absolute;
+    box-sizing: border-box;
+    content: attr(data-text);
+    color: var(--animation-color);
+    width: 0%;
+    inset: 0;
+    border-right: var(--border-right) solid var(--animation-color);
+    overflow: hidden;
+    transition: 0.5s;
+    -webkit-text-stroke: 1px var(--animation-color);
+  }
+  /* hover */
+  .nextQuestionButton:hover .hover-text {
+    width: 100%;
+    filter: drop-shadow(0 0 23px var(--animation-color))
+  }
+
+  .nextQuestionButton:disabled .hover-text{
+    --animation-color: #fabc13;
+  }
+
+/* AGAIN BUTTON */
+
+  /* === removing default button style ===*/
+  .againButton {
+    margin: 2rem;
+    height: auto;
+    background: transparent;
+    padding: 0;
+    border: none;
+    cursor: pointer;
+  }
+  
+  /* button styling */
+  .againButton {
+    --border-right: 6px;
+    --text-stroke-color: rgba(255,255,255,0.6);
+    --animation-color: #ffb937;
+    --fs-size: 2em;
+    letter-spacing: 3px;
+    text-decoration: none;
+    font-size: var(--fs-size);
+    font-family: "Arial";
+    position: relative;
+    text-transform: uppercase;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--text-stroke-color);
+  }
+  /* this is the text, when you hover on button */
+  .hover-text {
+    position: absolute;
+    box-sizing: border-box;
+    content: attr(data-text);
+    color: var(--animation-color);
+    width: 0%;
+    inset: 0;
+    border-right: var(--border-right) solid var(--animation-color);
+    overflow: hidden;
+    transition: 0.5s;
+    -webkit-text-stroke: 1px var(--animation-color);
+  }
+  /* hover */
+  .againButton:hover .hover-text {
+    width: 100%;
+    filter: drop-shadow(0 0 23px var(--animation-color))
+  }

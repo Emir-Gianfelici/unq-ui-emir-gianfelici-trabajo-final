@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Questions.css";
 import Api from "../services/Api";
 
@@ -10,8 +11,9 @@ const Questions = ({ difficulty }) => {
     const [canNextQuestion, setCanNextQuestion] = useState(true);
     const [cantCorrectAnswer, setCantCorrectAnswer] = useState(0);
     const [alreadyAnswered, setAlreadyAnswered] = useState(false);
-    const [button, setButton] = useState(null);
     const [errorMessage, setErrorMessage] = useState("");
+    const [element, setElement] = useState(null);
+    const navigate = useNavigate();
 
 
     useEffect(() => {
@@ -71,17 +73,16 @@ const Questions = ({ difficulty }) => {
 
 
     //Manejando las respuestas.
-    const handle_answer = async (question_id, option, element) => {
+    const handle_answer = async (question_id, option) => {
 
         setAlreadyAnswered(true);
-        setButton(element);
-
         const answer = { questionId : question_id, option : option };
-
+        const textElement = document.getElementById(option);
+        setElement(textElement);
         Api.post_answer(answer)
             .then(response => {
                 check_answer(response.data.answer);
-                response.data.answer ? element.target.className = "correctAnswerButton" : element.target.className = "incorrectAnswerButton";
+                response.data.answer ? textElement.className = "correctAnswer" : textElement.className = "incorrectAnswer";
             })
             .catch(error => {
                 setErrorMessage("Ocurrio un error al verificar la respuesta.");
@@ -97,49 +98,78 @@ const Questions = ({ difficulty }) => {
 
     const go_to_next_question = () => {
         
+        element.className = "answer";
+
         if (actualQuestion < questions.length - 1) {
             setActualQuestion(actualQuestion + 1);
             setAlreadyAnswered(false);
-            button.target.className = "";
         }
         else {
-            setCanNextQuestion(false);
-            
+            setCanNextQuestion(false);            
         };
 
     }
 
+    const first_letter_to_uppercase = (string) => {
 
-    //Snipper
-    if (isLoading) {
-        console.log("No hay questions");
-        return <div>Loading...</div>;
-
+        const first_letter = string.charAt(0);
+        const rest_string = string.substring(1);
+        return (first_letter.toUpperCase() + rest_string);
     };
+
+    const play_again = () => {
+        navigate("/");
+    }
     
     return (
         
-        <div>
-            <div className="errorMessage">
-                {errorMessage == "" ? "" : errorMessage}
+        <div className="app">
+            <div className="mainContainer">
+                <div className="errorMessage">
+                    {errorMessage == "" ? "" : errorMessage}
+                </div>
+                <div>
+                    {
+                        isLoading ?
+                        <div className="loader"></div>
+
+                        :
+
+                        <div className="questionContainer">
+                            <p className="difficultyText">Dificultad: {<span className="difficulty">{first_letter_to_uppercase(difficulty)}</span>}</p>
+                            <p className="correctAnswersText">Respuestas Correctas: {<span className="results">{cantCorrectAnswer}/{questions.length}</span>}</p>
+                            <p className="questionText">{questions[actualQuestion].Question}</p>
+                            <div className="optionsButtonsContainer">
+                                {
+                                    questions[actualQuestion].Answers.map(answer =>
+                                        <button onClick={() => handle_answer(questions[actualQuestion].Id, answer.option)}
+                                                key={answer.option}
+                                                disabled={alreadyAnswered}
+                                                className="optionButton">
+                                            <span id={answer.option} className="answer">{answer.answer_text}</span>
+                                        </button>
+                                    )
+                                }
+                            </div>
+                            <div>
+                                {
+                                    canNextQuestion ?
+                                    <button onClick={() => go_to_next_question()} disabled={!canNextQuestion} className="nextQuestionButton">
+                                        <span className="actual-text">&nbsp;Next&nbsp;</span>
+                                        <span aria-hidden="true" className="hover-text">&nbsp;Next&nbsp;</span>
+                                    </button>
+                                    :
+                                    <button onClick={() => play_again()} className="againButton">
+                                        <span className="actual-text">&nbsp;Again&nbsp;</span>
+                                        <span aria-hidden="true" className="hover-text">&nbsp;Again&nbsp;</span>
+                                    </button>
+                                }
+                            </div>
+                        </div>
+                        
+                    }
+                </div>
             </div>
-            <p>Dificultad: {difficulty}</p>
-            <p>Respuestas Correctas: {cantCorrectAnswer} / {questions.length}</p>
-            {
-                questions[actualQuestion].Question
-            }
-            <div>
-                {
-                    questions[actualQuestion].Answers.map(answer =>
-                        <button onClick={(e) => handle_answer(questions[actualQuestion].Id, answer.option, e)}
-                                key={answer.option}
-                                disabled={alreadyAnswered}>
-                            {answer.answer_text}
-                        </button>
-                    )
-                }
-            </div>
-            <button onClick={() => go_to_next_question()} disabled={!canNextQuestion}>Next</button>
         </div>
 
     );

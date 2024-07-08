@@ -42,7 +42,7 @@ const Home = () => {
     return (
 
         <div className="app">
-            <div className="homeMainContainer">
+            <div className="mainContainer">
                 <h1 className="appTitle">Preguntados App</h1>
                 <div className="errorMessage">
                     {errorMessage == "" ? "" : errorMessage}

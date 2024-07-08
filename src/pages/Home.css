@@ -4,7 +4,7 @@
     align-items: center;
 }
 
-.homeMainContainer{
+.mainContainer{
     margin: 2rem;
     display: flex;
     justify-content: center;
@@ -22,7 +22,7 @@
 .appTitle{
     border: 0.2rem;
     border-style: dashed;
-    border-color: mediumspringgreen;
+    border-color: #00fa9a;
     padding: 2rem;
     border-radius: 2rem;
 }
@@ -37,6 +37,7 @@
     font-weight: 500;
     font-size: 30px;
     color: rgb(255, 43, 43);
+    margin-top: 2rem;
 }
 
 .loader {
