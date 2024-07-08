@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import "./Questions.css";
+import Api from "../services/Api";
 
 const Questions = ({ difficulty }) => {
 
@@ -11,27 +11,27 @@ const Questions = ({ difficulty }) => {
     const [cantCorrectAnswer, setCantCorrectAnswer] = useState(0);
     const [alreadyAnswered, setAlreadyAnswered] = useState(false);
     const [button, setButton] = useState(null);
+    const [errorMessage, setErrorMessage] = useState("");
 
 
     useEffect(() => {
 
         const get_questions = async () => {
-            try {
-                const url = `https://preguntados-api.vercel.app/api/questions?difficulty=${difficulty}`;
-                const response = await axios.get(url);
-                prepare_questions(response.data);
-                setIsLoading(false);
-            }
-            catch (e) { //Mejorar el handleo.
-                console.log(e);
-                setIsLoading(false);
-            };
-        };
 
+            Api.get_questions(difficulty)
+                .then(response => {
+                    prepare_questions(response.data);
+                    setIsLoading(false);
+                })
+                .catch(error => {
+                    setIsLoading(false);
+                    setErrorMessage("Ocurrio un error al cargar las preguntas.");
+                });
+        };
 
         get_questions();
 
-    }, [axios]);
+    }, [Api]);
 
 
     //Preparando las preguntas.
@@ -76,18 +76,16 @@ const Questions = ({ difficulty }) => {
         setAlreadyAnswered(true);
         setButton(element);
 
-        try {
-            const url = `https://preguntados-api.vercel.app/api/answer`;
-            const data = {questionId: question_id, option: option};
-            const response = await axios.post(url, data);
-            check_answer(response.data.answer);
-            response.data.answer ? element.target.className = "correctAnswerButton" : element.target.className = "incorrectAnswerButton";
-            console.log(response.data.answer);
+        const answer = { questionId : question_id, option : option };
 
-        }
-        catch (e) { //Mejorar el handleo.
-            console.log(e);
-        };
+        Api.post_answer(answer)
+            .then(response => {
+                check_answer(response.data.answer);
+                response.data.answer ? element.target.className = "correctAnswerButton" : element.target.className = "incorrectAnswerButton";
+            })
+            .catch(error => {
+                setErrorMessage("Ocurrio un error al verificar la respuesta.");
+            });
     }
 
     const check_answer = (answer_result) => {
@@ -106,6 +104,7 @@ const Questions = ({ difficulty }) => {
         }
         else {
             setCanNextQuestion(false);
+            
         };
 
     }
@@ -121,7 +120,11 @@ const Questions = ({ difficulty }) => {
     return (
         
         <div>
-            <p>Respuestas Correctas: {cantCorrectAnswer}</p>
+            <div className="errorMessage">
+                {errorMessage == "" ? "" : errorMessage}
+            </div>
+            <p>Dificultad: {difficulty}</p>
+            <p>Respuestas Correctas: {cantCorrectAnswer} / {questions.length}</p>
             {
                 questions[actualQuestion].Question
             }

@@ -1,24 +1,28 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./Home.css"
-
+import Api from "../services/Api";
 
 const Home = () => {
 
     const [difficulties, setDifficulties] = useState([]);
     const navigate = useNavigate();
+    const [errorMessage, setErrorMessage] = useState("");
 
     useEffect(() => {
         const get_difficulties = async () => {
-            const url = "https://preguntados-api.vercel.app/api/difficulty";
-            const response = await axios.get(url);
-            setDifficulties(response.data);
+            Api.get_difficulties()
+                .then(response => {
+                    setDifficulties(response.data);
+                })
+                .catch(error => {
+                    setErrorMessage("Ocurrio un error al cargar la pagina.");
+                });
         };
 
         get_difficulties();
 
-    }, [axios]);
+    }, [Api]);
 
     const go_to_questions_with_difficulty = (difficulty) => {
         navigate(`/${difficulty}`);
@@ -28,6 +32,9 @@ const Home = () => {
 
         <div className="homeMainContainer">
             <h1>Bienvenido!</h1>
+            <div className="errorMessage">
+                {errorMessage == "" ? "" : errorMessage}
+            </div>
             <div>
                 <h2>Para comenzar, seleccione la dificultad de las preguntas: </h2>
             </div>
