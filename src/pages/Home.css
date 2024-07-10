@@ -1,0 +1,126 @@
+.app{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mainContainer{
+    margin: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border: 0.2rem;
+    border-style: solid;
+    border-color: mediumspringgreen;
+    border-radius: 2rem;
+    width: 50rem;
+    height: 50rem;
+    box-shadow: 0.0rem 0.0rem 0.6rem 0.4rem rgba(0, 250, 167, 0.445);
+}
+
+.appTitle{
+    border: 0.2rem;
+    border-style: dashed;
+    border-color: #00fa9a;
+    padding: 2rem;
+    border-radius: 2rem;
+}
+
+.selectDifficultyText{
+    font-weight: 700;
+    font-size: 30px;
+    
+}
+
+.errorMessage{
+    font-weight: 500;
+    font-size: 30px;
+    color: rgb(255, 43, 43);
+    margin-top: 2rem;
+}
+
+.loader {
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background-color: #69ffa8;
+    animation: 1.5s pulse infinite ease-in-out;
+    margin: 2rem;
+  }
+  
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 0 #69ffa8;
+    }
+  
+    100% {
+      box-shadow: 0 0 0 14px #69ffa800;
+    }
+  }
+
+.difficultyButton {
+    all: unset;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 0.0em 2em;
+    margin-bottom: 1rem;
+    width: 4rem;
+    border: mediumspringgreen solid 0.15em;
+    border-radius: 0.25em;
+    color: mediumspringgreen;
+    font-size: 1.5em;
+    font-weight: 600;
+    cursor: pointer;
+    overflow: hidden;
+    transition: border 300ms, color 300ms;
+    user-select: none;
+  }
+  
+  .difficultyButton p {
+    z-index: 1;
+  }
+  
+  .difficultyButton:hover {
+    color: #212121;
+  }
+  
+  .difficultyButton:active {
+    border-color: teal;
+  }
+  
+  .difficultyButton::after, .difficultyButton::before {
+    content: "";
+    position: absolute;
+    width: 9em;
+    aspect-ratio: 1;
+    background: mediumspringgreen;
+    opacity: 50%;
+    border-radius: 50%;
+    transition: transform 500ms, background 300ms;    
+  }
+  
+  .difficultyButton::before {
+    left: 0;
+    transform: translateX(-8em);
+  }
+  
+  .difficultyButton::after {
+    right: 0;
+    transform: translateX(8em);
+  }
+  
+  .difficultyButton:hover:before {
+    transform: translateX(-1em);
+  }
+  
+  .difficultyButton:hover:after {
+    transform: translateX(1em);
+  }
+  
+  .difficultyButton:active:before,
+  .difficultyButton:active:after {
+    background: teal;
+  }
