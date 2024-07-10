@@ -100,14 +100,9 @@ const Questions = ({ difficulty }) => {
         
         element.className = "answer";
 
-        if (actualQuestion < questions.length - 1) {
-            setActualQuestion(actualQuestion + 1);
-            setAlreadyAnswered(false);
-        }
-        else {
-            setCanNextQuestion(false);            
-        };
-
+        setCanNextQuestion(actualQuestion + 1 < questions.length - 1);
+        setActualQuestion(actualQuestion + 1);
+        setAlreadyAnswered(false);
     }
 
     const first_letter_to_uppercase = (string) => {
